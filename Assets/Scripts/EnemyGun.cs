@@ -6,21 +6,24 @@ public class EnemyGun : Gun
 {
     [SerializeField] private float _delay;
 
-    private void Start()
+    private Coroutine _coroutine;
+
+    public void ShootByEnemy()
     {
-        StartCoroutine(ShotFrequency());
+        _coroutine = StartCoroutine(ShotFrequency());
     }
 
-    public override void Fire()
+    private void OnDisable()
     {
-        base.Fire();
+        if (_coroutine != null)
+            StopCoroutine(_coroutine);
     }
 
     private IEnumerator ShotFrequency()
     {
         WaitForSeconds delay = new(_delay);
 
-        while(enabled)
+        while (enabled)
         {
             Fire();
 

@@ -1,6 +1,4 @@
 using System;
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 
 public class Score : MonoBehaviour
@@ -15,8 +13,7 @@ public class Score : MonoBehaviour
     {
         foreach (var spawner in _spawners)
         {
-            spawner.EnemySpawned += OnEnemySpawned;
-            spawner.EnemyDestroyed += OnEnemyDestroyed;
+            spawner.EnemyDestroyed += IncreaseValue;
         }
     }
 
@@ -24,8 +21,7 @@ public class Score : MonoBehaviour
     {
         foreach (var spawner in _spawners)
         {
-            spawner.EnemySpawned -= OnEnemySpawned;
-            spawner.EnemyDestroyed -= OnEnemyDestroyed;
+            spawner.EnemyDestroyed -= IncreaseValue;
         }
     }
 
@@ -33,15 +29,5 @@ public class Score : MonoBehaviour
     {
         _value += amount;
         Changed?.Invoke(_value);
-    }
-
-    private void OnEnemySpawned(Enemy enemy)
-    {
-        enemy.Died += IncreaseValue;
-    }
-
-    private void OnEnemyDestroyed(Enemy enemy)
-    {
-        enemy.Died -= IncreaseValue;
     }
 }

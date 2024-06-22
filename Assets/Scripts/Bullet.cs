@@ -22,7 +22,7 @@ public class Bullet : MonoBehaviour
         _rigidbody2D.velocity = transform.right * _speed;
     }
 
-    public void CallEvent()
+    protected void CallEventTriggered()
     {
         Triggered?.Invoke(this);
     }

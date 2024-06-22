@@ -10,8 +10,7 @@ public class EnemySpawner : MonoBehaviour
     [SerializeField] private ObjectPoolEnemy _pool;
     [SerializeField] private float _delay;
 
-    public event Action<Enemy> EnemySpawned;
-    public event Action<Enemy> EnemyDestroyed;
+    public event Action<int> EnemyDestroyed;
 
     private void Start()
     {
@@ -22,19 +21,18 @@ public class EnemySpawner : MonoBehaviour
     {
         Enemy enemy = _pool.Return();
         enemy.Triggered += OnEnemyTrigger;
+        enemy.Died += OnEnemyDestroyed;
         enemy.gameObject.SetActive(true);
         enemy.transform.position = _spawner.transform.position;
-        EnemySpawned?.Invoke(enemy);
+        enemy.Init();
     }
 
     public void OnEnemyTrigger(Enemy enemy)
     {
         enemy.Triggered -= OnEnemyTrigger;
-
+        enemy.Died -= OnEnemyDestroyed;
         _pool.Release(enemy);
-
         enemy.gameObject.SetActive(false);
-        EnemyDestroyed?.Invoke(enemy);
     }
 
     private IEnumerator GeneratorEnemies()
@@ -47,5 +45,10 @@ public class EnemySpawner : MonoBehaviour
 
             yield return timeToSpawn;
         }
+    }
+
+    private void OnEnemyDestroyed(int amount)
+    {
+        EnemyDestroyed?.Invoke(amount);
     }
 }

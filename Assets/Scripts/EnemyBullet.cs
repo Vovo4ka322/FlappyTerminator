@@ -9,6 +9,6 @@ public class EnemyBullet : Bullet
         if (collision.TryGetComponent(out Player player))
             player.Die();
 
-        CallEvent();
+        CallEventTriggered();
     }
 }
